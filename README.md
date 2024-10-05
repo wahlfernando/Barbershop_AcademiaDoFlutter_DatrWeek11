@@ -1,6 +1,7 @@
 <p align="center">
-    <img src="https://github.com/wahlfernando/Barbershop_AcademiaDoFlutter_DatrWeek11/dw_barbershop/assets/images/2x/imgLogo.png/imgLogo.png" width="150" alt="Logo App Barbearia"/>
+    <img src="https://github.com/wahlfernando/Barbershop_AcademiaDoFlutter_DatrWeek11/blob/master/dw_barbershop/assets/images/2x/imgLogo.png" width="150" alt="Logo BarberShop"/>
 </p>
+
 
 <h1 align="center">BarberShop App</h1>
 
