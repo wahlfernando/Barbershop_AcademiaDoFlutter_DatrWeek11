@@ -1,115 +1,175 @@
+import 'dart:developer';
+
 import 'package:dw_barbershop/src/core/components/hours_panel.dart';
 import 'package:dw_barbershop/src/core/components/weekdays_panel.dart';
+import 'package:dw_barbershop/src/core/providers/applications_providers.dart';
+import 'package:dw_barbershop/src/core/theme/ui/widget/barbershop_loader.dart';
+import 'package:dw_barbershop/src/features/employee/presentation/pages/register/employee_register_vm.dart';
 import 'package:dw_barbershop/src/features/employee/presentation/widgets/avatar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:validatorless/validatorless.dart';
 
-class EmployeeRegisterPage extends StatefulWidget {
+import '../../../../barbershop/data/models/barbershop_model.dart';
+
+class EmployeeRegisterPage extends ConsumerStatefulWidget {
   const EmployeeRegisterPage({super.key});
 
   @override
-  State<EmployeeRegisterPage> createState() => _EmployeeRegisterPageState();
+  ConsumerState<EmployeeRegisterPage> createState() =>
+      _EmployeeRegisterPageState();
 }
 
-class _EmployeeRegisterPageState extends State<EmployeeRegisterPage> {
-  
+class _EmployeeRegisterPageState extends ConsumerState<EmployeeRegisterPage> {
   var registerADM = false;
-  
+
+  final formKey = GlobalKey<FormState>();
+  final nameEC = TextEditingController();
+  final emailEC = TextEditingController();
+  final passwordEC = TextEditingController();
+
+  @override
+  void dispose() {
+    nameEC.dispose();
+    emailEC.dispose();
+    passwordEC.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final employeeRegisterVm = ref.watch(employeeRegisterVmProvider.notifier);
+    final barbershopAsyncValue = ref.watch(getMyBarbershopProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cadastar colaborador'),
       ),
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Column(
-            children: [
-              const AvatarWidget(),
-              const SizedBox(
-                height: 32,
-              ),
-              Row(
-                children: [
-                  Checkbox.adaptive(
-                    value: registerADM,
-                    onChanged: (value) {
-                      setState(() {
-                        registerADM = !registerADM;
-                      });
-                    },
+      body: barbershopAsyncValue.when(
+        data: (barbershopModel) {
+
+          final BarbershopModel(:openingDays, :openingHours) = barbershopModel;
+
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Form(
+                key: formKey,
+                child: Center(
+                  child: Column(
+                    children: [
+                      const AvatarWidget(),
+                      const SizedBox(
+                        height: 32,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox.adaptive(
+                            value: registerADM,
+                            onChanged: (value) {
+                              setState(() {
+                                registerADM = !registerADM;
+                                employeeRegisterVm.setRegisterAdm(registerADM);
+                              });
+                            },
+                          ),
+                          const Expanded(
+                            child: Text(
+                              'Sou administrador e quero me cadastrar como colaborador',
+                              style: TextStyle(fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Offstage(
+                        offstage: registerADM,
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            TextFormField(
+                              validator:
+                                  Validatorless.required('Nome obrigatório'),
+                              controller: nameEC,
+                              decoration: const InputDecoration(
+                                label: Text('Nome'),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            TextFormField(
+                              validator: Validatorless.multiple([
+                                Validatorless.required('E-mail obrigatório'),
+                                Validatorless.email('E-mail inválido')
+                              ]),
+                              controller: emailEC,
+                              decoration: const InputDecoration(
+                                label: Text('E-mail'),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            TextFormField(
+                              validator: Validatorless.multiple([
+                                Validatorless.required('Senha obrigatória'),
+                                Validatorless.min(
+                                    6, 'Deve conter no mínimo 6 caracteres')
+                              ]),
+                              controller: passwordEC,
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                label: Text('Senha'),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            WeekdaysPanel(
+                              enableDays: barbershopModel.openingDays,
+                              onDayPressed:
+                                  employeeRegisterVm.addOrRemoveWordDays,
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            HoursPanel(
+                              enableTimes: barbershopModel.openingHours,
+                              startTime: 6,
+                              endTime: 22,
+                              onHourPressed:
+                                  employeeRegisterVm.addOrRemoveWordHour,
+                            ),
+                            const SizedBox(
+                              height: 24,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size.fromHeight(56)),
+                              onPressed: () {},
+                              child: const Text('Cadastrar colaborador'),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                  const Expanded(
-                    child: Text(
-                      'Sou administrador e quero me cadastrar como colaborador',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-              Offstage(
-                offstage: registerADM,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        label: Text('Nome'),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        label: Text('E-mail'),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    TextFormField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
-                        label: Text('Senha'),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    WeekdaysPanel(
-                      enableDays: ['Seg', 'Qua', 'Sex'],
-                      onDayPressed: (String day) {},
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    HoursPanel(
-                      enableTimes: [6,8,9,11, 14,15,16],
-                      startTime: 6,
-                      endTime: 22,
-                      onHourPressed: (int hour) {},
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(56)
-                      ),
-                      onPressed: () {},
-                      child: const Text('Cadastrar colaborador'),
-                    ),
-                  ],
                 ),
-              )
-            ],
-          ),
-        ),
-      )),
+              ),
+            ),
+          );
+        },
+        error: (error, stackTrace) {
+          var msg = 'Erro ao carregar a pagina';
+          log(msg, error: error, stackTrace: stackTrace);
+          return Center(
+            child: Text(msg),
+          );
+        },
+        loading: () => const BarbershopLoader(),
+      ),
     );
   }
 }

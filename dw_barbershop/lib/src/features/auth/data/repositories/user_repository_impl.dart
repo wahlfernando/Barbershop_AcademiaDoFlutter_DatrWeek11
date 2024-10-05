@@ -95,4 +95,61 @@ class UserRepositoryImpl implements UserRepository {
       return Failure(RepositoryException(message: msg));
     }
   }
+
+  @override
+  Future<Either<RepositoryException, Nil>> registerAdmEmployee(
+      ({List<String> workDays, List<int> workHours}) userModel) async {
+    try {
+      final userModelResult = await me();
+
+      final int userId;
+
+      switch (userModelResult) {
+        case Success(value: UserModel(:var id)):
+          userId = id;
+        case Failure(:var exception):
+          return Failure(exception);
+      }
+
+      await restClient.auth.put('/users/$userId', data: {
+        'work_days': userModel.workDays,
+        'work_hours': userModel.workHours,
+      });
+
+      return Success(nil);
+    } on DioException catch (e, s) {
+      var msg = 'Erro ao inserir administradro como colaborador';
+      log(msg, error: e, stackTrace: s);
+      return Failure(RepositoryException(message: msg));
+    }
+  }
+
+  @override
+  Future<Either<RepositoryException, Nil>> registerEmployee(
+      ({
+        String email,
+        int id,
+        String name,
+        String password,
+        List<String> workDays,
+        List<int> workHours,
+      }) userModel) async{
+       try {
+      
+      await restClient.auth.post('/users/', data: {
+        'name': userModel.name,
+        'email': userModel.email,
+        'password':userModel.password,
+        'barbershop_id':userModel.barbershop_id,
+        'work_days': userModel.workDays,
+        'work_hours': userModel.workHours,
+      });
+
+      return Success(nil);
+    } on DioException catch (e, s) {
+      var msg = 'Erro ao inserir administradro como colaborador';
+      log(msg, error: e, stackTrace: s);
+      return Failure(RepositoryException(message: msg));
+    }
+  }
 }
