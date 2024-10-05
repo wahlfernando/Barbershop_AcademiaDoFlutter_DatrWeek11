@@ -127,9 +127,9 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<Either<RepositoryException, Nil>> registerEmployee(
       ({
-        String email,
-        int id,
+        int barbershopId,
         String name,
+        String email,
         String password,
         List<String> workDays,
         List<int> workHours,
@@ -140,7 +140,8 @@ class UserRepositoryImpl implements UserRepository {
         'name': userModel.name,
         'email': userModel.email,
         'password':userModel.password,
-        'barbershop_id':userModel.barbershop_id,
+        'barbershop_id':userModel.barbershopId,
+        'profile': 'EMPLOYEE',
         'work_days': userModel.workDays,
         'work_hours': userModel.workHours,
       });

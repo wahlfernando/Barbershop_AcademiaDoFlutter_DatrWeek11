@@ -106,18 +106,18 @@ class HomeHeader extends ConsumerWidget {
           ),
           Offstage(
             offstage: hideFilter,
-            child: TextFormField(
-              onTapOutside: (_) => context.unfocus(),
-              decoration: const InputDecoration(
-                  label: Text('Buscar colaborador'),
-                  suffixIcon: Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Icon(
+            child: SizedBox(
+              height: 36,
+              child: TextFormField(
+                onTapOutside: (_) => context.unfocus(),
+                decoration: const InputDecoration(
+                    label: Text('Buscar colaborador', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.blueAccent),),
+                    suffixIcon: Icon(
                       Icons.search,
-                      size: 26,
+                      size: 22,
                       color: ColorsConstants.brow,
-                    ),
-                  )),
+                    )),
+              ),
             ),
           )
         ],
