@@ -1,11 +1,10 @@
 <p align="center">
-    <img src="https://github.com/wahlfernando/Barbershop_AcademiaDoFlutter_DatrWeek11/blob/master/dw_barbershop/assets/images/2x/imgLogo.png" width="150" alt="Logo BarberShop"/>
+    <img src="https://github.com/wahlfernando/Barbershop_AcademiaDoFlutter_DatrWeek11/blob/master/dw_barbershop/assets/images/2x/imgLogo.png" width="100" alt="Logo BarberShop"/>
 </p>
-
 
 <h1 align="center">BarberShop App</h1>
 
-<h2>📖 Sobre o App</h2>
+<h2>Sobre o App</h2>
 
 <p>
     Projeto desenvolvido na Dart Week | 11ª Edição, um evento de lançamento para a <a href="http://academiadoflutter.com.br/">Academia do Flutter (ADF)</a>, do <a href="https://github.com/rodrigorahman">Rodrigo Rahman</a>.<br><br>
@@ -13,7 +12,7 @@
 
 ---   
 
-<h2>🛠️ Funcionalidades e Tecnologias Estudadas</h2>
+<h2>Funcionalidades e Tecnologias Estudadas</h2>
 
 - Usando o Dart 3:
     - Programação Funcional (Either) com Pure Dart (usando o poder do Dart 3)
