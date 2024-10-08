@@ -2,7 +2,9 @@ import 'package:dw_barbershop/src/core/components/hours_panel.dart';
 import 'package:dw_barbershop/src/core/theme/ui/constants.dart';
 import 'package:dw_barbershop/src/core/theme/ui/helpers/form_helpers.dart';
 import 'package:dw_barbershop/src/core/theme/ui/helpers/message.dart';
+import 'package:dw_barbershop/src/features/auth/data/models/user_model.dart';
 import 'package:dw_barbershop/src/features/employee/presentation/widgets/avatar_widget.dart';
+import 'package:dw_barbershop/src/features/schedeule/presentation/pages/schedule_state.dart';
 import 'package:dw_barbershop/src/features/schedeule/presentation/pages/schedule_vm.dart';
 import 'package:dw_barbershop/src/features/schedeule/presentation/widgets/schedule_calendar.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +33,34 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
     dateEC.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final userModel = ModalRoute.of(context)!.settings.arguments as UserModel;
 
     final scheduleVm = ref.watch(scheduleVmProvider.notifier);
 
+    final employeeData = switch (userModel) {
+      UserModelAdm(:final workDays, :final workHours) => (
+          workDays: workDays!,
+          workHours: workHours!,
+        ),
+      UserModelEmployee(:final workDays, :final workHours) => (
+          workDays: workDays,
+          workHours: workHours,
+        ),  
+    };
+
+    ref.listen(scheduleVmProvider.select((state) => state.status), (_, status){
+      switch(status){
+        case ScheduleStateStatus.initial:
+          break;
+        case ScheduleStateStatus.success:
+          Messages.showSuccess('Cleinte agendado com sucesso!', context);
+          Navigator.pop(context);
+        case ScheduleStateStatus.error:  
+          Messages.showError('Erro ao registrar agendamento', context);
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -60,9 +84,10 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   const SizedBox(
                     height: 12,
                   ),
-                  const Text(
-                    'Nome e sobrenome',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  Text(
+                    userModel.name,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(
                     height: 24,
@@ -79,7 +104,8 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                   ),
                   TextFormField(
                     controller: dateEC,
-                    validator: Validatorless.required('Selecione a data ed agendamento'),
+                    validator: Validatorless.required(
+                        'Selecione a data ed agendamento'),
                     readOnly: true,
                     onTap: () {
                       setState(() {
@@ -105,6 +131,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                           height: 24,
                         ),
                         ScheduleCalendar(
+                          workDays: employeeData.workDays,
                           cancelPressed: () {
                             setState(() {
                               showCalendar = false;
@@ -134,7 +161,7 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     startTime: 6,
                     endTime: 23,
                     onHourPressed: scheduleVm.hourSelect,
-                    enableTimes: const [6, 7, 8],
+                    enableTimes: employeeData.workHours,
                   ),
                   const SizedBox(
                     height: 24,
@@ -143,16 +170,21 @@ class _SchedulePageState extends ConsumerState<SchedulePage> {
                     style: ElevatedButton.styleFrom(
                         minimumSize: const Size.fromHeight(56)),
                     onPressed: () {
-                      switch(formKey.currentState?.validate()){
+                      switch (formKey.currentState?.validate()) {
                         case false || null:
                           Messages.showError('Dados incompletos', context);
                         case true:
-                          final hourSelected = ref.watch(scheduleVmProvider.select((state) => state.scheduleHour != null,));
-                          
-                          if(hourSelected){
+                          final hourSelected =
+                              ref.watch(scheduleVmProvider.select(
+                            (state) => state.scheduleHour != null,
+                          ));
 
-                          } else{
-                            Messages.showError('Por favor selecione um horario de atendimento', context);
+                          if (hourSelected) {
+                            scheduleVm.register(userModel: userModel, clientName: clienteEC.text);
+                          } else {
+                            Messages.showError(
+                                'Por favor selecione um horario de atendimento',
+                                context);
                           }
                       }
                     },
