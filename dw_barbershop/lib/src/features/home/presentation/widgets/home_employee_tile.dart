@@ -53,14 +53,16 @@ class HomeEmployeeTile extends StatelessWidget {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 12)),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/schedule');
+                      },
                       child: const Text('AGENDAR'),
                     ),
                     OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(horizontal: 12)),
                       onPressed: () {},
-                      child: const Text('Ver agenda'),
+                      child: const Text('VER AGENDA'),
                     ),
                     const Icon(
                       Icons.edit_outlined,
