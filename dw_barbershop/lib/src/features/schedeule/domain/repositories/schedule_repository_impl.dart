@@ -1,13 +1,9 @@
 import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:dw_barbershop/src/core/error/exceptions/repository_exception.dart';
 import 'package:dw_barbershop/src/core/usecase/restClient/rest_client.dart';
-
 import 'package:dw_barbershop/src/core/utils/fp/either.dart';
-
 import 'package:dw_barbershop/src/core/utils/fp/nil.dart';
-
 import '../../data/repositories/schedule_repository.dart';
 
 class ScheduleRepositoryImpl implements ScheduleRepository {
@@ -39,4 +35,6 @@ class ScheduleRepositoryImpl implements ScheduleRepository {
       return Failure(RepositoryException(message: 'Erro ao agendar horário'));
     }
   }
+
+  
 }

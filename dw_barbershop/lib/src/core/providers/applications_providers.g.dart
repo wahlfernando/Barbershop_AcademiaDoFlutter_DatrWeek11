@@ -126,5 +126,23 @@ final scheduleRepositoryProvider =
 );
 
 typedef ScheduleRepositoryRef = AutoDisposeProviderRef<ScheduleRepository>;
+String _$scheduleEmployeeRepositoryHash() =>
+    r'3fb115e02b8dcead912eebe575cf610bde75487c';
+
+/// See also [scheduleEmployeeRepository].
+@ProviderFor(scheduleEmployeeRepository)
+final scheduleEmployeeRepositoryProvider =
+    AutoDisposeProvider<ScheduleEmployeeRepository>.internal(
+  scheduleEmployeeRepository,
+  name: r'scheduleEmployeeRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$scheduleEmployeeRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ScheduleEmployeeRepositoryRef
+    = AutoDisposeProviderRef<ScheduleEmployeeRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

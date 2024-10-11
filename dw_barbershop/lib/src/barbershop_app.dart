@@ -7,8 +7,10 @@ import 'package:dw_barbershop/src/features/auth/register/barbershop/barbershop_r
 import 'package:dw_barbershop/src/features/auth/register/user/user_register_page.dart';
 import 'package:dw_barbershop/src/features/employee/presentation/pages/register/employee_register_page.dart';
 import 'package:dw_barbershop/src/features/home/presentation/pages/adm/home_adm_page.dart';
+import 'package:dw_barbershop/src/features/home/presentation/pages/employee/employee_page.dart';
 import 'package:dw_barbershop/src/features/schedeule/presentation/pages/schedule_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'features/employee/presentation/pages/schedule/employee_schedule_page.dart';
 import 'features/splash/splash_page.dart';
@@ -33,10 +35,18 @@ class BarbershopApp extends StatelessWidget {
               '/auth/register/user': (_) => const UserRegisterPage(),
               '/auth/register/barbershop': (_) => const BarbershopRegisterPage(),
               '/home/adm': (_) => const HomeAdmPage(),
+              '/home/employee': (_) => const EmployeePage(),
               '/employee/register': (_) => const EmployeeRegisterPage(),
               '/employee/schedule': (_) => const EmployeeSchedulePage(),
               '/schedule': (_) => const SchedulePage(),
             },
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('pt', 'BR')],
+            locale: const Locale('pt', 'BR'),
           );
         });
   }

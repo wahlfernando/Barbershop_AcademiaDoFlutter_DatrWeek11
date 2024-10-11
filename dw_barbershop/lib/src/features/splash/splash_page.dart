@@ -6,6 +6,9 @@ import 'package:dw_barbershop/src/features/splash/splash_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/theme/ui/helpers/message.dart';
+import '../auth/login/login_page.dart';
+
 class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
@@ -56,7 +59,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         error: (error, stackTrace) {
           var msg = 'Erro ao validar login';
           log(msg, error: error, stackTrace: stackTrace);
-          // Messages.showError(msg, context);
+          Messages.showError(msg, context);
           _redirect('/auth/login');
         },
         data: (data) {
@@ -89,20 +92,20 @@ class _SplashPageState extends ConsumerState<SplashPage> {
             setState(() {
               _endAnimation = true;
             });
-            // Navigator.of(context).pushAndRemoveUntil(
-            //     PageRouteBuilder(
-            //       settings: const RouteSettings(name: '/auth/login'),
-            //       pageBuilder: (context, animation, secondaryAnimation) {
-            //         return const LoginPage();
-            //       },
-            //       transitionsBuilder: (_, animation, __, child) {
-            //         return FadeTransition(
-            //           opacity: animation,
-            //           child: child,
-            //         );
-            //       },
-            //     ),
-            //     (route) => false);
+            Navigator.of(context).pushAndRemoveUntil(
+                PageRouteBuilder(
+                  settings: const RouteSettings(name: '/auth/login'),
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return const LoginPage();
+                  },
+                  transitionsBuilder: (_, animation, __, child) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: child,
+                    );
+                  },
+                ),
+                (route) => false);
           },
           child: Center(
             child: AnimatedContainer(

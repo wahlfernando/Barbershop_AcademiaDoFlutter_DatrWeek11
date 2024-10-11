@@ -7,6 +7,8 @@ import 'package:dw_barbershop/src/core/usecase/restClient/rest_client.dart';
 import 'package:dw_barbershop/src/features/auth/domain/usecases/services/user_login_service.dart';
 import 'package:dw_barbershop/src/features/barbershop/data/repositories/barbershop_repository_impl.dart';
 import 'package:dw_barbershop/src/features/barbershop/domain/repositories/barbershop_repository.dart';
+import 'package:dw_barbershop/src/features/employee/data/repositories/schedule_employee_repository.dart';
+import 'package:dw_barbershop/src/features/employee/domain/repositories/schedule_employee_repository_impl.dart';
 import 'package:dw_barbershop/src/features/schedeule/domain/repositories/schedule_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -81,5 +83,11 @@ Future<void> logout(LogoutRef ref) async {
 @riverpod
 ScheduleRepository scheduleRepository(ScheduleRepositoryRef ref) =>
     ScheduleRepositoryImpl(
+      restClient: ref.read(restClientProvider),
+    );
+
+@riverpod
+ScheduleEmployeeRepository scheduleEmployeeRepository(ScheduleEmployeeRepositoryRef ref) =>
+    ScheduleEmployeeRepositoryImpl(
       restClient: ref.read(restClientProvider),
     );

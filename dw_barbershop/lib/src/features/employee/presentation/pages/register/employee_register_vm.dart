@@ -12,6 +12,7 @@ part 'employee_register_vm.g.dart';
 
 @riverpod
 class EmployeeRegisterVm extends _$EmployeeRegisterVm {
+  @override
   EmployeeRegisterState build() => EmployeeRegisterState.initial();
 
   void setRegisterAdm(bool isRegisterAdm) {
